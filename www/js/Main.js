@@ -18,7 +18,7 @@ var tileVisibleWidth = 69.28,
     var tiles = []
     for (var y = -3; y <= 3; y++) {
         for (var x = -3; x <= 3; x++) {
-            tiles.push(Tile(x, y))
+            tiles.push(Tile(x, y, Math.random() < 0.5 ? 'grass' : 'gravel'))
         }
     }
 
