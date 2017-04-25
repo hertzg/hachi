@@ -1,0 +1,10 @@
+.Tile-image {
+    pointer-events: none;
+}
+
+.Tile-mask {
+    fill: transparent;
+}
+.Tile-mask:hover {
+    fill: hsla(60, 100%, 50%, 0.5);
+}
