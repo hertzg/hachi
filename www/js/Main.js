@@ -10,10 +10,19 @@ var tileVisibleWidth = 69.28,
 var obstacleWidth = tileWidth,
     obstacleHeight = 80
 
-var obstacleVisibleWidth = 69.28,
-    obstacleVisibleHeight = 40
+var buildingWidth = 160.00000,
+    buildingHeight = 140
 
 ;(function () {
+
+    function putBuilding (x, y, type) {
+        var building = Building(x, y, type)
+        buildings.push(building)
+        buildingsMap[x + ',' + y] = building
+        buildingsMap[x + ',' + (y + 1)] = building
+        buildingsMap[(x + 1) + ',' + y] = building
+        buildingsMap[(x + 1) + ',' + (y + 1)] = building
+    }
 
     function repaint () {
 
@@ -24,10 +33,9 @@ var obstacleVisibleWidth = 69.28,
             zoomG.appendChild(tile.element)
         })
 
-        obstacles.sort(function (a, b) {
+        obstacles.concat(buildings).sort(function (a, b) {
             return a.zIndex > b.zIndex ? 1 : -1
-        })
-        obstacles.forEach(function (obstacle) {
+        }).forEach(function (obstacle) {
             zoomG.appendChild(obstacle.element)
         })
 
@@ -38,15 +46,24 @@ var obstacleVisibleWidth = 69.28,
     }
 
     var zoom = 4
+    var mapSize = 5
+
+    var buildings = []
+    var buildingsMap = Object.create(null)
+    putBuilding(-mapSize, -mapSize, 'castle')
+    putBuilding(mapSize - 1, mapSize - 1, 'castle')
+    putBuilding(2, 2, 'farm')
 
     var tiles = []
     var obstacles = []
-    for (var y = -3; y <= 3; y++) {
-        for (var x = -3; x <= 3; x++) {
+    for (var y = -mapSize; y <= mapSize; y++) {
+        for (var x = -mapSize; x <= mapSize; x++) {
             var tile = Tile(x, y, Math.random() < 0.5 ? 'grass' : 'gravel')
             tiles.push(tile)
-            if (Math.random() < 0.3) {
-                obstacles.push(Obstacle(x, y, 'tree'))
+            if (buildingsMap[x + ',' + y] === undefined) {
+                if (Math.random() < 0.1) {
+                    obstacles.push(Obstacle(x, y, 'tree'))
+                }
             }
         }
     }

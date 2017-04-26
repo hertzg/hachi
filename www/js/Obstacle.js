@@ -9,7 +9,7 @@ function Obstacle (x, y, type) {
 
     var g = document.createElementNS(svg_xmlns, 'g')
     g.appendChild(image)
-    g.setAttribute('transform', 'translate(' + (x * obstacleVisibleWidth * 0.5 + y * obstacleVisibleWidth * 0.5) + ', ' + (y * tileVisibleHeight * 0.5 - x * tileVisibleHeight * 0.5) + ')')
+    g.setAttribute('transform', 'translate(' + ((x + y) * tileVisibleWidth * 0.5) + ', ' + ((y - x) * tileVisibleHeight * 0.5) + ')')
 
     return {
         element: g,

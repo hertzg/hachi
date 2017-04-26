@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16"
-     inkscape:cx="35.399416"
-     inkscape:cy="37.559785"
+     inkscape:zoom="11.313709"
+     inkscape:cx="54.399884"
+     inkscape:cy="29.13785"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -42,7 +42,7 @@
        type="axonomgrid"
        id="grid4487"
        units="px"
-       empspacing="5"
+       empspacing="4"
        originx="10.583334"
        originy="7.9375002"
        spacingy="0.66145835"
@@ -56,7 +56,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
