@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="bushes-2.svg">
+   sodipodi:docname="bushes-1.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -56,7 +56,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,13 +67,7 @@
      transform="translate(0,-275.83334)">
     <g
        id="g10738"
-       transform="translate(-2.2913589,0.66145515)">
-      <path
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="path4611"
-         d="m 8.2919754,289.0625 2.8641986,1.65365 2.864198,-1.65364 -2.864199,-1.65365 z"
-         style="fill:#000000;fill-opacity:0.1254902;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       transform="translate(-2.2913589,-0.66146155)">
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
@@ -136,14 +130,8 @@
          style="opacity:1;vector-effect:none;fill:#35a11a;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
-       transform="translate(3.4370384,-0.6614499)"
+       transform="translate(3.4370384,0.66146515)"
        id="g10801">
-      <path
-         style="fill:#000000;fill-opacity:0.1254902;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m 8.2919754,289.0625 2.8641986,1.65365 2.864198,-1.65364 -2.864199,-1.65365 z"
-         id="path10777"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc" />
       <path
          style="fill:#7e5e1f;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 9.4376544,289.0625 1.1456796,0.66146 v -1.32292 l -1.1456796,-0.66146 z"

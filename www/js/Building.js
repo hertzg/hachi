@@ -15,7 +15,8 @@ function Building (x, y, type) {
     g.setAttribute('transform', 'translate(' + screenX + ', ' + screenY + ')')
 
     return {
-        element: g,
+        objectElement: g,
+        shadowElement: g,
         screenX: screenX,
         screenY: screenY,
         zIndex: y - x,

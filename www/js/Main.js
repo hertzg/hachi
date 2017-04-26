@@ -50,10 +50,12 @@ var buildingWidth = 160,
                 y * zoom < -innerHeight * 0.5 - buildingHeight * zoom ||
                 y * zoom > innerHeight * 0.5 + buildingHeight * zoom) {
 
-                building.element.setAttribute('visibility', 'hidden')
+                building.objectElement.setAttribute('visibility', 'hidden')
+                building.shadowElement.setAttribute('visibility', 'hidden')
 
             } else {
-                building.element.setAttribute('visibility', 'visible')
+                building.objectElement.setAttribute('visibility', 'visible')
+                building.shadowElement.setAttribute('visibility', 'visible')
             }
 
         }
@@ -72,10 +74,12 @@ var buildingWidth = 160,
                 y * zoom < -innerHeight * 0.5 - obstacleHeight * zoom ||
                 y * zoom > innerHeight * 0.5 + obstacleHeight * zoom) {
 
-                obstacle.element.setAttribute('visibility', 'hidden')
+                obstacle.objectElement.setAttribute('visibility', 'hidden')
+                obstacle.shadowElement.setAttribute('visibility', 'hidden')
 
             } else {
-                obstacle.element.setAttribute('visibility', 'visible')
+                obstacle.objectElement.setAttribute('visibility', 'visible')
+                obstacle.shadowElement.setAttribute('visibility', 'visible')
             }
 
         }
@@ -131,10 +135,14 @@ var buildingWidth = 160,
             translateG.appendChild(tile.element)
         })
 
-        obstacles.concat(buildings).sort(function (a, b) {
+        var all = obstacles.concat(buildings).sort(function (a, b) {
             return a.zIndex > b.zIndex ? 1 : -1
-        }).forEach(function (obstacle) {
-            translateG.appendChild(obstacle.element)
+        })
+        all.forEach(function (obstacle) {
+            translateG.appendChild(obstacle.shadowElement)
+        })
+        all.forEach(function (obstacle) {
+            translateG.appendChild(obstacle.objectElement)
         })
 
     }
