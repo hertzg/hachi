@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.313708"
-     inkscape:cx="34.798325"
-     inkscape:cy="38.183275"
+     inkscape:cx="31.262791"
+     inkscape:cy="31.112207"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -67,8 +67,9 @@
      transform="translate(0,-275.83334)">
     <path
        style="fill:#000000;fill-opacity:0.1254902;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 18.030252,286.7474 -2.864199,-1.65364 -10.8839561,6.28385 2.864199,1.65365 z"
+       d="m 18.030252,286.7474 -2.291359,-1.32291 -10.3111166,5.95312 2.2913589,1.32292 z"
        id="path3123"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
   </g>
 </svg>
