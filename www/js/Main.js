@@ -52,17 +52,23 @@ var buildingWidth = 160.00000,
     var buildingsMap = Object.create(null)
     putBuilding(-mapSize, -mapSize, 'castle')
     putBuilding(mapSize - 1, mapSize - 1, 'castle')
-    putBuilding(2, 2, 'farm')
+    putBuilding(1, 2, 'farm')
+    putBuilding(-2, -3, 'farm')
 
     var tiles = []
     var obstacles = []
     for (var y = -mapSize; y <= mapSize; y++) {
         for (var x = -mapSize; x <= mapSize; x++) {
-            var tile = Tile(x, y, Math.random() < 0.5 ? 'grass' : 'gravel')
+            var groundType = Math.random() < 0.7 ? 'grass' : 'gravel'
+            var tile = Tile(x, y, groundType)
             tiles.push(tile)
             if (buildingsMap[x + ',' + y] === undefined) {
-                if (Math.random() < 0.1) {
-                    obstacles.push(Obstacle(x, y, 'tree'))
+                if (Math.random() < 0.2 && groundType === 'grass') {
+                    if (Math.random() < 0.4) {
+                        obstacles.push(Obstacle(x, y, 'tree'))
+                    } else {
+                        obstacles.push(Obstacle(x, y, Math.random() < 0.5 ? 'trees-1' : 'trees-2'))
+                    }
                 }
             }
         }
