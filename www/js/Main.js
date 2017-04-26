@@ -40,13 +40,13 @@ var buildingWidth = 160.00000,
             return a.zIndex > b.zIndex ? 1 : -1
         })
         tiles.forEach(function (tile) {
-            zoomG.appendChild(tile.element)
+            translateG.appendChild(tile.element)
         })
 
         obstacles.concat(buildings).sort(function (a, b) {
             return a.zIndex > b.zIndex ? 1 : -1
         }).forEach(function (obstacle) {
-            zoomG.appendChild(obstacle.element)
+            translateG.appendChild(obstacle.element)
         })
 
     }
@@ -55,7 +55,8 @@ var buildingWidth = 160.00000,
         g.setAttribute('transform', 'translate(' + (innerWidth * 0.5) + ', ' + (innerHeight * 0.5) + ')')
     }
 
-    var zoom = 4
+    var zoomDivider = 4
+    var zoom = zoomDivider
     var mapSize = 8
 
     var trees = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2']
@@ -98,7 +99,13 @@ var buildingWidth = 160.00000,
         }
     }
 
+    var translateX = 0,
+        translateY = 0
+
+    var translateG = document.createElementNS(svg_xmlns, 'g')
+
     var zoomG = document.createElementNS(svg_xmlns, 'g')
+    zoomG.appendChild(translateG)
 
     var g = document.createElementNS(svg_xmlns, 'g')
     g.appendChild(zoomG)
@@ -106,6 +113,36 @@ var buildingWidth = 160.00000,
     var svg = document.createElementNS(svg_xmlns, 'svg')
     svg.setAttribute('class', 'Main')
     svg.appendChild(g)
+    svg.addEventListener('mousedown', function (e) {
+
+        function mouseMove (e) {
+
+            var dx = e.clientX - x,
+                dy = e.clientY - y
+
+            translateX += dx / (zoom / zoomDivider)
+            translateY += dy / (zoom / zoomDivider)
+            translateG.setAttribute('transform', 'translate(' + translateX + ', ' + translateY + ')')
+            x = e.clientX
+            y = e.clientY
+
+            e.preventDefault()
+
+        }
+
+        function mouseUp () {
+            removeEventListener('mousemove', mouseMove)
+            removeEventListener('mouseup', mouseUp)
+        }
+
+        var x = e.clientX,
+            y = e.clientY
+
+        e.preventDefault()
+        addEventListener('mousemove', mouseMove)
+        addEventListener('mouseup', mouseUp)
+
+    })
 
     document.body.appendChild(svg)
 
@@ -117,12 +154,12 @@ var buildingWidth = 160.00000,
             e.preventDefault()
             if (zoom === 1) return
             zoom /= 2
-            zoomG.setAttribute('transform', 'scale(' + zoom / 4 + ')')
+            zoomG.setAttribute('transform', 'scale(' + zoom / zoomDivider + ')')
         } else if (e.deltaY < 0) {
             e.preventDefault()
             if (zoom === 16) return
             zoom *= 2
-            zoomG.setAttribute('transform', 'scale(' + zoom / 4 + ')')
+            zoomG.setAttribute('transform', 'scale(' + zoom / zoomDivider + ')')
         }
     })
 
