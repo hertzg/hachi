@@ -24,6 +24,10 @@ var buildingWidth = 160.00000,
         buildingsMap[(x + 1) + ',' + (y + 1)] = building
     }
 
+    function random (array) {
+        return array[Math.floor(Math.random() * array.length)]
+    }
+
     function repaint () {
 
         tiles.sort(function (a, b) {
@@ -48,6 +52,8 @@ var buildingWidth = 160.00000,
     var zoom = 4
     var mapSize = 5
 
+    var trees = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2']
+
     var buildings = []
     var buildingsMap = Object.create(null)
     putBuilding(-mapSize, -mapSize, 'castle')
@@ -66,11 +72,7 @@ var buildingWidth = 160.00000,
             tiles.push(tile)
             if (buildingsMap[x + ',' + y] === undefined) {
                 if (Math.random() < 0.2 && groundType === 'grass') {
-                    if (Math.random() < 0.4) {
-                        obstacles.push(Obstacle(x, y, 'tree'))
-                    } else {
-                        obstacles.push(Obstacle(x, y, Math.random() < 0.5 ? 'trees-1' : 'trees-2'))
-                    }
+                    obstacles.push(Obstacle(x, y, random(trees)))
                 }
             }
         }
