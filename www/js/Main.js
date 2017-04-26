@@ -62,6 +62,8 @@ var buildingWidth = 160.00000,
     putBuilding(-2, -3, 'farm')
     putBuilding(-4, 0, 'tower')
     putBuilding(3, 0, 'tower')
+    putBuilding(-3, 3, 'gold')
+    putBuilding(3, -5, 'stone')
 
     var tiles = []
     var obstacles = []
