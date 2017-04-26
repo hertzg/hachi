@@ -7,12 +7,17 @@ function Obstacle (x, y, type) {
     image.setAttribute('height', obstacleHeight)
     image.setAttribute('transform', 'translate(' + (-obstacleWidth * 0.5) + ', ' + (-obstacleHeight + tileHeight * 0.5) + ')')
 
+    var screenX = (x + y) * tileVisibleWidth * 0.5,
+        screenY = (y - x) * tileVisibleHeight * 0.5
+
     var g = document.createElementNS(svg_xmlns, 'g')
     g.appendChild(image)
-    g.setAttribute('transform', 'translate(' + ((x + y) * tileVisibleWidth * 0.5) + ', ' + ((y - x) * tileVisibleHeight * 0.5) + ')')
+    g.setAttribute('transform', 'translate(' + screenX + ', ' + screenY + ')')
 
     return {
         element: g,
+        screenX: screenX,
+        screenY: screenY,
         zIndex: y - x,
     }
 

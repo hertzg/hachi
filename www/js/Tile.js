@@ -11,13 +11,18 @@ function Tile (x, y, type) {
     maskPath.setAttribute('class', 'Tile-mask')
     maskPath.setAttribute('d', 'M0 -20 L34.641 0 0 20 -34.641 0 Z')
 
+    var screenX = (x + y) * tileVisibleWidth * 0.5,
+        screenY = (y - x) * tileVisibleHeight * 0.5
+
     var g = document.createElementNS(svg_xmlns, 'g')
     g.appendChild(image)
     g.appendChild(maskPath)
-    g.setAttribute('transform', 'translate(' + ((x + y) * tileVisibleWidth * 0.5) + ', ' + ((y - x) * tileVisibleHeight * 0.5) + ')')
+    g.setAttribute('transform', 'translate(' + screenX + ', ' + screenY + ')')
 
     return {
         element: g,
+        screenX: screenX,
+        screenY: screenY,
         zIndex: y - x,
     }
 
