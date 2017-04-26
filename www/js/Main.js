@@ -54,6 +54,8 @@ var buildingWidth = 160.00000,
     putBuilding(mapSize - 1, mapSize - 1, 'castle')
     putBuilding(1, 2, 'farm')
     putBuilding(-2, -3, 'farm')
+    putBuilding(-4, 0, 'tower')
+    putBuilding(3, 0, 'tower')
 
     var tiles = []
     var obstacles = []
