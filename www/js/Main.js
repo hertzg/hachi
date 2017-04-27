@@ -344,12 +344,12 @@ var buildingWidth = 160,
         if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return
         if (e.deltaY > 0) {
             e.preventDefault()
-            zoom = Math.max(zoom * 0.5, 0.25)
+            zoom = Math.max(zoom / 1.1, 0.25)
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
             cleanAll()
         } else if (e.deltaY < 0) {
             e.preventDefault()
-            zoom = Math.min(zoom * 2, 4)
+            zoom = Math.min(zoom * 1.1, 4)
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
             cleanAll()
         }
