@@ -1,4 +1,8 @@
-function Tile (x, y, type) {
+function Tile (axoCoords, type) {
+
+    var rectCoords = axoCoordsToRectCoords(axoCoords)
+
+    var screenCoords = rectCoordsToScreenCoords(rectCoords)
 
     var image = document.createElementNS(svg_xmlns, 'image')
     image.setAttribute('class', 'Tile-image')
@@ -11,19 +15,15 @@ function Tile (x, y, type) {
     maskPath.setAttribute('class', 'Tile-mask')
     maskPath.setAttribute('d', 'M0 -20 L34.641 0 0 20 -34.641 0 Z')
 
-    var screenX = (x + y) * tileVisibleWidth * 0.5,
-        screenY = (y - x) * tileVisibleHeight * 0.5
-
     var g = document.createElementNS(svg_xmlns, 'g')
     g.appendChild(image)
     g.appendChild(maskPath)
-    g.setAttribute('transform', 'translate(' + screenX + ', ' + screenY + ')')
+    g.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
         element: g,
-        screenX: screenX,
-        screenY: screenY,
-        zIndex: y - x,
+        rectCoords: rectCoords,
+        screenCoords: screenCoords,
     }
 
 }

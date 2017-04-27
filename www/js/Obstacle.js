@@ -1,7 +1,8 @@
-function Obstacle (x, y, type) {
+function Obstacle (axoCoords, type) {
 
-    var screenX = (x + y) * tileVisibleWidth * 0.5,
-        screenY = (y - x) * tileVisibleHeight * 0.5
+    var rectCoords = axoCoordsToRectCoords(axoCoords)
+
+    var screenCoords = rectCoordsToScreenCoords(rectCoords)
 
     var objectImage = document.createElementNS(svg_xmlns, 'image')
     objectImage.setAttribute('class', 'Obstacle-image')
@@ -12,7 +13,7 @@ function Obstacle (x, y, type) {
 
     var objectG = document.createElementNS(svg_xmlns, 'g')
     objectG.appendChild(objectImage)
-    objectG.setAttribute('transform', 'translate(' + screenX + ', ' + screenY + ')')
+    objectG.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     var shadowImage = document.createElementNS(svg_xmlns, 'image')
     shadowImage.setAttribute('class', 'Obstacle-image')
@@ -23,14 +24,13 @@ function Obstacle (x, y, type) {
 
     var shadowG = document.createElementNS(svg_xmlns, 'g')
     shadowG.appendChild(shadowImage)
-    shadowG.setAttribute('transform', 'translate(' + screenX + ', ' + screenY + ')')
+    shadowG.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
         objectElement: objectG,
+        rectCoords: rectCoords,
+        screenCoords: screenCoords,
         shadowElement: shadowG,
-        screenX: screenX,
-        screenY: screenY,
-        zIndex: y - x,
     }
 
 }
