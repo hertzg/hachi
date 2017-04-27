@@ -88,12 +88,11 @@ var buildingWidth = 160,
                 y * zoom < -innerHeight * 0.5 - buildingHeight * zoom ||
                 y * zoom > innerHeight * 0.5 + buildingHeight * zoom) {
 
-                building.objectElement.setAttribute('visibility', 'hidden')
-                building.shadowElement.setAttribute('visibility', 'hidden')
+                translateG.removeChild(building.shadowElement)
+                delete buildingsMap[building.axoCoords[0] + ',' + building.axoCoords[1]]
+                buildings.splice(i, 1)
+                i--
 
-            } else {
-                building.objectElement.setAttribute('visibility', 'visible')
-                building.shadowElement.setAttribute('visibility', 'visible')
             }
 
         }
@@ -112,12 +111,12 @@ var buildingWidth = 160,
                 y * zoom < -innerHeight * 0.5 - obstacleHeight * zoom ||
                 y * zoom > innerHeight * 0.5 + obstacleHeight * zoom) {
 
-                obstacle.objectElement.setAttribute('visibility', 'hidden')
-                obstacle.shadowElement.setAttribute('visibility', 'hidden')
+                translateG.removeChild(obstacle.objectElement)
+                translateG.removeChild(obstacle.shadowElement)
+                delete obstaclesMap[obstacle.axoCoords[0] + ',' + obstacle.axoCoords[1]]
+                obstacles.splice(i, 1)
+                i--
 
-            } else {
-                obstacle.objectElement.setAttribute('visibility', 'visible')
-                obstacle.shadowElement.setAttribute('visibility', 'visible')
             }
 
         }
@@ -136,10 +135,11 @@ var buildingWidth = 160,
                 y * zoom < -innerHeight * 0.5 - tileHeight * zoom ||
                 y * zoom > innerHeight * 0.5 + tileHeight * zoom) {
 
-                tile.element.setAttribute('visibility', 'hidden')
+                translateG.removeChild(tile.element)
+                delete tilesRectMap[tile.rectCoords[0] + ',' + tile.rectCoords[1]]
+                tiles.splice(i, 1)
+                i--
 
-            } else {
-                tile.element.setAttribute('visibility', 'visible')
             }
 
         }
@@ -153,20 +153,20 @@ var buildingWidth = 160,
                 var axoCoords = rectCoordsToAxoCoords([x, y])
                 if (Math.abs(axoCoords[0]) > mapSize ||
                     Math.abs(axoCoords[1]) > mapSize) continue
-                emptyIndexes.push(axoCoords)
+                emptyPoints.push(axoCoords)
             }
         }
 
         var topLeftCoords = axoCoordsToRectCoords(axoCoordsAt(-tileVisibleWidth * zoom, -tileVisibleHeight * zoom)),
             bottomRightCoords = axoCoordsToRectCoords(axoCoordsAt(innerWidth + tileVisibleWidth * zoom, innerHeight + tileVisibleHeight * zoom))
 
-        var emptyIndexes = []
+        var emptyPoints = []
         for (var y = topLeftCoords[1]; y <= bottomRightCoords[1]; y += 2) {
             checkRow(topLeftCoords[0], bottomRightCoords[0], y)
-            checkRow(topLeftCoords[0] + 1, bottomRightCoords[1], y + 1)
+            checkRow(topLeftCoords[0] + 1, bottomRightCoords[0], y + 1)
         }
 
-        emptyIndexes.forEach(function (point) {
+        emptyPoints.forEach(function (point) {
             putTile(point, 'grass')
         })
         repaint()
@@ -210,11 +210,11 @@ var buildingWidth = 160,
         var all = obstacles.concat(buildings).sort(function (a, b) {
             return a.rectCoords[1] > b.rectCoords[1] ? 1 : -1
         })
-        all.forEach(function (obstacle) {
-            translateG.appendChild(obstacle.shadowElement)
+        all.forEach(function (item) {
+            translateG.appendChild(item.shadowElement)
         })
-        all.forEach(function (obstacle) {
-            translateG.appendChild(obstacle.objectElement)
+        all.forEach(function (item) {
+            translateG.appendChild(item.objectElement)
         })
 
     }
@@ -227,10 +227,9 @@ var buildingWidth = 160,
     var zoom = 1
     var mapSize = 8
 
-    var trees = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2']
-
     var buildings = []
     var buildingsMap = Object.create(null)
+/*
     putBuilding(-mapSize + 1, -mapSize + 1, 'castle')
     putBuilding(mapSize - 2, mapSize - 2, 'castle')
     putBuilding(mapSize - 5, mapSize - 2, 'farm')
@@ -240,9 +239,11 @@ var buildingWidth = 160,
     putBuilding(4, 1, 'tower')
     putBuilding(3, -5, 'stone')
     putBuilding(-3, 3, 'gold')
+*/
 
     var obstacles = []
     var obstaclesMap = Object.create(null)
+/*
     putObstacle([-1, -8], 'wall-vertical')
     putObstacle([-1, -7], 'wall-vertical')
     putObstacle([-1, -6], 'wall-vertical')
@@ -270,21 +271,10 @@ var buildingWidth = 160,
     putObstacle([6, 3], 'wall-horizontal')
     putObstacle([7, 3], 'wall-horizontal')
     putObstacle([8, 3], 'wall-horizontal')
-
+*/
+ 
     var tiles = []
     var tilesRectMap = []
-    for (var y = -mapSize; y <= mapSize; y++) {
-        for (var x = -mapSize; x <= mapSize; x++) {
-            var groundType = Math.random() < 0.7 ? 'grass' : 'gravel'
-            putTile([x, y], groundType)
-            if (buildingsMap[x + ',' + y] === undefined &&
-                obstaclesMap[x + ',' + y] === undefined) {
-                if (Math.random() < 0.2 && groundType === 'grass') {
-                    putObstacle([x, y], random(trees))
-                }
-            }
-        }
-    }
 
     var cleanTimeout = 0,
         cleanScheduled = false

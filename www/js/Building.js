@@ -16,6 +16,7 @@ function Building (axoCoords, type) {
     g.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
+        axoCoords: axoCoords,
         objectElement: g,
         rectCoords: rectCoords,
         screenCoords: screenCoords,

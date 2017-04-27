@@ -27,6 +27,7 @@ function Obstacle (axoCoords, type) {
     shadowG.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
+        axoCoords: axoCoords,
         objectElement: objectG,
         rectCoords: rectCoords,
         screenCoords: screenCoords,
