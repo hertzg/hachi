@@ -14,10 +14,13 @@ echo Table\ensure($mysqli, 'tile', [
         'type' => 'bigint(20) unsigned',
         'primary' => true,
     ],
-    'x' => [
+    'map_id' => [
         'type' => 'bigint(20) unsigned',
     ],
+    'x' => [
+        'type' => 'bigint(20)',
+    ],
     'y' => [
-        'type' => 'bigint(20) unsigned',
+        'type' => 'bigint(20)',
     ],
 ]);
