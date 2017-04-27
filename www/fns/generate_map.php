@@ -9,19 +9,26 @@ function generate_map ($size) {
     include_once __DIR__.'/mysqli_safe_query.php';
     mysqli_safe_query($mysqli, $sql);
 
+    $obstacles = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2'];
+
     $id = $mysqli->insert_id;
 
     $values = [];
     $flush = function () use ($mysqli, &$values) {
-        $sql = 'insert into tile (map_id, x, y, ground)'
+        $sql = 'insert into tile (map_id, x, y, ground, obstacle)'
             .' values '.join(', ', $values);
         mysqli_safe_query($mysqli, $sql);
         $values = [];
     };
     for ($y = -$size; $y <= $size; $y++) {
         for ($x = -$size; $x <= $size; $x++) {
-            $ground = rand(0, 100) < 50 ? 'gravel' : 'grass';
-            $values[] = "($id, $x, $y, '$ground')";
+            $ground = rand(0, 100) < 30 ? 'gravel' : 'grass';
+            if ($ground === 'grass' && rand(0, 100) < 30) {
+                $obstacle = "'".$obstacles[array_rand($obstacles)]."'";
+            } else {
+                $obstacle = 'null';
+            }
+            $values[] = "($id, $x, $y, '$ground', $obstacle)";
             if (count($values) === 100) $flush();
         }
     }

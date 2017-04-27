@@ -17,6 +17,12 @@ echo Table\ensure($mysqli, 'tile', [
     'map_id' => [
         'type' => 'bigint(20) unsigned',
     ],
+    'obstacle' => [
+        'type' => 'varchar(30)',
+        'characterSet' => 'ascii',
+        'collation' => 'ascii_bin',
+        'nullable' => true,
+    ],
     'x' => [
         'type' => 'bigint(20)',
     ],

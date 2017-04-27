@@ -70,7 +70,7 @@ var buildingWidth = 160,
             cleanScheduled = false
             cleanAll()
 
-        }, 50)
+        }, 100)
         return
 
     }
@@ -153,6 +153,7 @@ var buildingWidth = 160,
                 var axoCoords = rectCoordsToAxoCoords([x, y])
                 if (Math.abs(axoCoords[0]) > mapSize ||
                     Math.abs(axoCoords[1]) > mapSize) continue
+                if (loadingTiles[axoCoords[0] + ',' + axoCoords[1]] !== undefined) continue
                 emptyPoints.push(axoCoords)
             }
         }
@@ -166,10 +167,30 @@ var buildingWidth = 160,
             checkRow(topLeftCoords[0] + 1, bottomRightCoords[0], y + 1)
         }
 
-        emptyPoints.forEach(function (point) {
-            putTile(point, 'grass')
+        if (emptyPoints.length === 0) return
+
+        var request = new XMLHttpRequest
+        request.open('post', 'api/fetch.php')
+        request.responseType = 'json'
+        request.send(JSON.stringify(emptyPoints))
+        request.onerror = function () {
+            // TODO
+        }
+        request.onload = function () {
+            emptyPoints.forEach(function (coords) {
+                delete loadingTiles[coords[0] + ',' + coords[1]]
+            })
+            request.response.forEach(function (item) {
+                putTile(item[0], item[1])
+                var obstacleType = item[2]
+                if (obstacleType !== null) putObstacle(item[0], obstacleType)
+            })
+            repaint()
+        }
+
+        emptyPoints.forEach(function (coords) {
+            loadingTiles[coords[0] + ',' + coords[1]] = true
         })
-        repaint()
 
     }
 
@@ -225,7 +246,7 @@ var buildingWidth = 160,
     }
 
     var zoom = 1
-    var mapSize = 8
+    var mapSize = map.size
 
     var buildings = []
     var buildingsMap = Object.create(null)
@@ -273,6 +294,8 @@ var buildingWidth = 160,
     putObstacle([8, 3], 'wall-horizontal')
 */
  
+    var loadingTiles = Object.create(null)
+
     var tiles = []
     var tilesRectMap = []
 
