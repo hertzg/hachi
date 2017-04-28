@@ -3,7 +3,7 @@
 $size = 10;
 
 include_once 'fns/generate_map.php';
-generate_map($size);
+$id = generate_map($size);
 
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -18,6 +18,7 @@ echo '<!DOCTYPE html>'
         .'<body>'
             .'<script type="text/javascript">'
                 .'var map = '.json_encode([
+                    'id' => $id,
                     'size' => $size,
                 ])
             .'</script>'

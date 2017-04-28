@@ -2,8 +2,10 @@
 
 include_once '../lib/mysqli.php';
 
-include_once '../fns/mysqli_value.php';
-$map_id = mysqli_value($mysqli, 'select max(id) from map');
+include_once '../fns/request_strings.php';
+list($map_id) = request_strings('map_id');
+
+$map_id = abs((int)$map_id);
 
 $coords = json_decode(file_get_contents('php://input'));
 if (!is_array($coords)) {

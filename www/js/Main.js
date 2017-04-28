@@ -1,4 +1,4 @@
-;(function () {
+;(function (map) {
 
     function axoCoordsAt (clientX, clientY) {
 
@@ -131,7 +131,7 @@
         if (emptyPoints.length === 0) return
 
         var request = new XMLHttpRequest
-        request.open('post', 'api/fetch.php')
+        request.open('post', 'api/fetch.php?map_id=' + map.id)
         request.responseType = 'json'
         request.send(JSON.stringify(emptyPoints))
         request.onerror = function () {
@@ -334,4 +334,4 @@
     addEventListener('resize', resize)
     resize()
 
-})()
+})(map)
