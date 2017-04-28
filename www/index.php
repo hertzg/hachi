@@ -21,10 +21,12 @@ echo '<!DOCTYPE html>'
                     'size' => $size,
                 ])
             .'</script>'
+            .'<script type="text/javascript" src="js/Init.js"></script>'
             .'<script type="text/javascript" src="js/AxoToRect.js"></script>'
             .'<script type="text/javascript" src="js/Building.js"></script>'
             .'<script type="text/javascript" src="js/Obstacle.js"></script>'
             .'<script type="text/javascript" src="js/RectToAxo.js"></script>'
+            .'<script type="text/javascript" src="js/RectToScreen.js"></script>'
             .'<script type="text/javascript" src="js/Tile.js"></script>'
             .'<script type="text/javascript" src="js/Main.js"></script>'
         .'</body>'

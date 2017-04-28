@@ -2,7 +2,7 @@ function Obstacle (axoCoords, type) {
 
     var rectCoords = AxoToRect(axoCoords)
 
-    var screenCoords = rectCoordsToScreenCoords(rectCoords)
+    var screenCoords = RectToScreen(rectCoords)
 
     var objectImage = document.createElementNS(svg_xmlns, 'image')
     objectImage.setAttribute('class', 'Obstacle-image')
