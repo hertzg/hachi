@@ -1,6 +1,6 @@
 function Building (axoCoords, type) {
 
-    var rectCoords = axoCoordsToRectCoords(axoCoords)
+    var rectCoords = AxoToRect(axoCoords)
 
     var screenCoords = rectCoordsToScreenCoords(rectCoords)
 

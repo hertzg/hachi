@@ -1,6 +1,6 @@
 <?php
 
-$size = 4;
+$size = 10;
 
 include_once 'fns/generate_map.php';
 generate_map($size);
@@ -21,6 +21,7 @@ echo '<!DOCTYPE html>'
                     'size' => $size,
                 ])
             .'</script>'
+            .'<script type="text/javascript" src="js/AxoToRect.js"></script>'
             .'<script type="text/javascript" src="js/Building.js"></script>'
             .'<script type="text/javascript" src="js/Obstacle.js"></script>'
             .'<script type="text/javascript" src="js/Tile.js"></script>'

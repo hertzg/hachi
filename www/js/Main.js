@@ -1,12 +1,3 @@
-function axoCoordsToRectCoords (axoCoords) {
-
-    var x = axoCoords[0],
-        y = axoCoords[1]
-
-    return [x + y, y - x]
-
-}
-
 function rectCoordsToAxoCoords (rectCoords) {
     var rx = rectCoords[0]
     var ay = (rx + rectCoords[1]) / 2
@@ -158,8 +149,8 @@ var buildingWidth = 160,
             }
         }
 
-        var topLeftCoords = axoCoordsToRectCoords(axoCoordsAt(-tileVisibleWidth * zoom, -tileVisibleHeight * zoom)),
-            bottomRightCoords = axoCoordsToRectCoords(axoCoordsAt(innerWidth + tileVisibleWidth * zoom, innerHeight + tileVisibleHeight * zoom))
+        var topLeftCoords = AxoToRect(axoCoordsAt(-tileVisibleWidth * zoom, -tileVisibleHeight * zoom)),
+            bottomRightCoords = AxoToRect(axoCoordsAt(innerWidth + tileVisibleWidth * zoom, innerHeight + tileVisibleHeight * zoom))
 
         var emptyPoints = []
         for (var y = topLeftCoords[1]; y <= bottomRightCoords[1]; y += 2) {
@@ -220,6 +211,8 @@ var buildingWidth = 160,
     }
 
     function repaint () {
+
+        console.assert(Object.keys(tilesRectMap).length === tiles.length)
 
         tiles.sort(function (a, b) {
             return a.rectCoords[1] > b.rectCoords[1] ? 1 : -1
