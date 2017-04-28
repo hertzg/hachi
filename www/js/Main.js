@@ -1,9 +1,3 @@
-function rectCoordsToAxoCoords (rectCoords) {
-    var rx = rectCoords[0]
-    var ay = (rx + rectCoords[1]) / 2
-    return [rx - ay, ay]
-}
-
 function rectCoordsToScreenCoords (rectCoords) {
     return [
         rectCoords[0] * tileVisibleWidth * 0.5,
@@ -141,7 +135,7 @@ var buildingWidth = 160,
         function checkRow (x0, x1, y) {
             for (var x = x0; x <= x1; x += 2) {
                 if (tilesRectMap[x + ',' + y] !== undefined) continue
-                var axoCoords = rectCoordsToAxoCoords([x, y])
+                var axoCoords = RectToAxo([x, y])
                 if (Math.abs(axoCoords[0]) > mapSize ||
                     Math.abs(axoCoords[1]) > mapSize) continue
                 if (loadingTiles[axoCoords[0] + ',' + axoCoords[1]] !== undefined) continue
