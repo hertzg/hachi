@@ -145,6 +145,8 @@
                 putTile(item[0], item[1])
                 var obstacleType = item[2]
                 if (obstacleType !== null) putObstacle(item[0], obstacleType)
+                var buildingType = item[3]
+                if (buildingType !== null) putBuilding(item[0], buildingType)
             })
             repaint()
         }
@@ -155,13 +157,18 @@
 
     }
 
-    function putBuilding (x, y, type) {
-        var building = Building([x, y], type)
+    function putBuilding (axoCoords, type) {
+
+        var x = axoCoords[0],
+            y = axoCoords[1]
+
+        var building = Building(axoCoords, type)
         buildings.push(building)
         buildingsMap[x + ',' + y] = building
-        buildingsMap[x + ',' + (y + 1)] = building
+        buildingsMap[x + ',' + (y - 1)] = building
         buildingsMap[(x + 1) + ',' + y] = building
-        buildingsMap[(x + 1) + ',' + (y + 1)] = building
+        buildingsMap[(x + 1) + ',' + (y - 1)] = building
+
     }
 
     function putObstacle (axoCoords, type) {
@@ -214,15 +221,14 @@
     var buildings = []
     var buildingsMap = Object.create(null)
 /*
-    putBuilding(-mapSize + 1, -mapSize + 1, 'castle')
-    putBuilding(mapSize - 2, mapSize - 2, 'castle')
-    putBuilding(mapSize - 5, mapSize - 2, 'farm')
-    putBuilding(-mapSize + 5, -mapSize, 'farm')
-    putBuilding(-mapSize + 5, -mapSize + 2, 'farm')
-    putBuilding(-3, -3, 'tower')
-    putBuilding(4, 1, 'tower')
-    putBuilding(3, -5, 'stone')
-    putBuilding(-3, 3, 'gold')
+    putBuilding([mapSize - 2], mapSize - 2, 'castle')
+    putBuilding([mapSize - 5], mapSize - 2, 'farm')
+    putBuilding([-mapSize + 5], -mapSize, 'farm')
+    putBuilding([-mapSize + 5], -mapSize + 2, 'farm')
+    putBuilding([-3, -3], 'tower')
+    putBuilding([4, 1], 'tower')
+    putBuilding([3, -5], 'stone')
+    putBuilding([-3, 3], 'gold')
 */
 
     var obstacles = []

@@ -5,6 +5,11 @@ chdir(__DIR__);
 include_once '../../fns/Table/ensure.php';
 include_once '../../lib/mysqli.php';
 echo Table\ensure($mysqli, 'tile', [
+    'building' => [
+        'type' => 'varchar(30)',
+        'characterSet' => 'ascii',
+        'collation' => 'ascii_bin',
+    ],
     'ground' => [
         'type' => 'varchar(30)',
         'characterSet' => 'ascii',

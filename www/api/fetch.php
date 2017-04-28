@@ -32,7 +32,7 @@ $tiles = mysqli_query_assoc($mysqli, $sql);
 $tiles = array_map(function ($tile) {
     return [
         [(int)$tile['x'], (int)$tile['y']],
-        $tile['ground'], $tile['obstacle'],
+        $tile['ground'], $tile['obstacle'], $tile['building'],
     ];
 }, $tiles);
 

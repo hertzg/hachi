@@ -1,6 +1,6 @@
 <?php
 
-$size = 10;
+$size = 4;
 
 include_once 'fns/generate_map.php';
 $id = generate_map($size);

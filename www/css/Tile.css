@@ -1,7 +1,3 @@
 .Tile-image {
     pointer-events: none;
 }
-
-.Tile-mask {
-    fill: transparent;
-}

@@ -11,13 +11,8 @@ function Tile (axoCoords, type) {
     image.setAttribute('height', tileHeight)
     image.setAttribute('transform', 'translate(' + (-tileWidth * 0.5) + ', ' + (-tileHeight * 0.5) + ')')
 
-    var maskPath = document.createElementNS(svg_xmlns, 'path')
-    maskPath.setAttribute('class', 'Tile-mask')
-    maskPath.setAttribute('d', 'M0 -20 L34.641 0 0 20 -34.641 0 Z')
-
     var g = document.createElementNS(svg_xmlns, 'g')
     g.appendChild(image)
-    g.appendChild(maskPath)
     g.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
