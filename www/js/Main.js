@@ -155,8 +155,6 @@
 
     function repaint () {
 
-        console.assert(Object.keys(tilesRectMap).length === tiles.length)
-
         tiles.sort(function (a, b) {
             return a.rectCoords[1] > b.rectCoords[1] ? 1 : -1
         })
@@ -177,6 +175,10 @@
     }
 
     function resize () {
+        minZoom = innerWidth / (tileVisibleWidth * 12)
+        maxZoom = innerWidth / (tileVisibleWidth * 4)
+        zoom = Math.max(minZoom, Math.min(maxZoom, zoom))
+        zoomG.setAttribute('transform', 'scale(' + zoom + ')')
         scheduleLoad()
         g.setAttribute('transform', 'translate(' + (innerWidth * 0.5) + ', ' + (innerHeight * 0.5) + ')')
     }
@@ -202,7 +204,9 @@
 
     }
 
-    var zoom = 1
+    var minZoom, maxZoom
+    var zoom = innerWidth / (tileVisibleWidth * 8)
+
     var mapSize = map.size
 
     var buildings = []
@@ -284,13 +288,13 @@
             x = e.clientX
             y = e.clientY
             translateG.setAttribute('transform', 'translate(' + translateX + ', ' + translateY + ')')
-            scheduleLoad()
 
             e.preventDefault()
 
         }
 
         function mouseUp () {
+            scheduleLoad()
             removeEventListener('mousemove', mouseMove)
             removeEventListener('mouseup', mouseUp)
         }
@@ -306,19 +310,18 @@
 
     document.body.appendChild(svg)
 
-    repaint()
     scheduleLoad()
 
     addEventListener('wheel', function (e) {
         if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return
         if (e.deltaY > 0) {
             e.preventDefault()
-            zoom = Math.max(zoom / 1.1, 0.25)
+            zoom = Math.max(zoom / 1.1, minZoom)
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
             scheduleLoad()
         } else if (e.deltaY < 0) {
             e.preventDefault()
-            zoom = Math.min(zoom * 1.1, 4)
+            zoom = Math.min(zoom * 1.1, maxZoom)
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
             scheduleLoad()
         }
