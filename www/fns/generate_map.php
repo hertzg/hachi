@@ -27,7 +27,7 @@ function generate_map () {
         }
 
         $put_building = function ($x, $y, $building) use (&$tiles) {
-            $tiles[$y][$x]['building'] = 'castle';
+            $tiles[$y][$x]['building'] = $building;
             $tiles[$y][$x]['taken'] = true;
             $tiles[$y][$x + 1]['taken'] = true;
             $tiles[$y - 1][$x]['taken'] = true;
