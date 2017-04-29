@@ -1,9 +1,10 @@
 <?php
 
-$size = 20;
+include_once 'lib/mysqli.php';
 
-include_once 'fns/generate_map.php';
-$id = generate_map($size);
+$sql = 'select * from map where id in (select max(id) from map)';
+include_once 'fns/mysqli_single_assoc.php';
+$map = mysqli_single_assoc($mysqli, $sql);
 
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -18,8 +19,8 @@ echo '<!DOCTYPE html>'
         .'<body>'
             .'<script type="text/javascript">'
                 .'var map = '.json_encode([
-                    'id' => $id,
-                    'size' => $size,
+                    'id' => (int)$map['id'],
+                    'size' => (int)$map['size'],
                 ])
             .'</script>'
             .'<script type="text/javascript" src="js/Init.js"></script>'
