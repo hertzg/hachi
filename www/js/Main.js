@@ -12,120 +12,86 @@
 
     }
 
-    function cleanAll () {
-
-        if (cleanTimeout !== 0) {
-            cleanScheduled = true
-            return
-        }
-
-        cleanTimeout = setTimeout(function () {
-
-            cleanBuildings()
-            cleanObstacles()
-            cleanTiles()
-            loadEmpty()
-
-            cleanTimeout = 0
-            if (!cleanScheduled) return
-            cleanScheduled = false
-            cleanAll()
-
-        }, 100)
-        return
-
-    }
-
-    function cleanBuildings () {
-        for (var i = 0; i < buildings.length; i++) {
-
-            var building = buildings[i]
-
-            var x = building.screenCoords[0] + translateX,
-                y = building.screenCoords[1] + translateY
-
-            if (x * zoom < -innerWidth * 0.5 - buildingWidth * zoom ||
-                x * zoom > innerWidth * 0.5 + buildingWidth * zoom ||
-                y * zoom < -innerHeight * 0.5 - buildingHeight * zoom ||
-                y * zoom > innerHeight * 0.5 + buildingHeight * zoom) {
-
-                translateG.removeChild(building.shadowElement)
-                delete buildingsMap[building.axoCoords[0] + ',' + building.axoCoords[1]]
-                buildings.splice(i, 1)
-                i--
-
-            }
-
-        }
-    }
-
-    function cleanObstacles () {
-        for (var i = 0; i < obstacles.length; i++) {
-
-            var obstacle = obstacles[i]
-
-            var x = obstacle.screenCoords[0] + translateX,
-                y = obstacle.screenCoords[1] + translateY
-
-            if (x * zoom < -innerWidth * 0.5 - obstacleWidth * zoom ||
-                x * zoom > innerWidth * 0.5 + obstacleWidth * zoom ||
-                y * zoom < -innerHeight * 0.5 - obstacleHeight * zoom ||
-                y * zoom > innerHeight * 0.5 + obstacleHeight * zoom) {
-
-                translateG.removeChild(obstacle.objectElement)
-                translateG.removeChild(obstacle.shadowElement)
-                delete obstaclesMap[obstacle.axoCoords[0] + ',' + obstacle.axoCoords[1]]
-                obstacles.splice(i, 1)
-                i--
-
-            }
-
-        }
-    }
-
-    function cleanTiles () {
-        for (var i = 0; i < tiles.length; i++) {
-
-            var tile = tiles[i]
-
-            var x = tile.screenCoords[0] + translateX,
-                y = tile.screenCoords[1] + translateY
-
-            if (x * zoom < -innerWidth * 0.5 - tileWidth * zoom ||
-                x * zoom > innerWidth * 0.5 + tileWidth * zoom ||
-                y * zoom < -innerHeight * 0.5 - tileHeight * zoom ||
-                y * zoom > innerHeight * 0.5 + tileHeight * zoom) {
-
-                translateG.removeChild(tile.element)
-                delete tilesRectMap[tile.rectCoords[0] + ',' + tile.rectCoords[1]]
-                tiles.splice(i, 1)
-                i--
-
-            }
-
-        }
-    }
-
-    function loadEmpty () {
+    function load () {
 
         function checkRow (x0, x1, y) {
             for (var x = x0; x <= x1; x += 2) {
-                if (tilesRectMap[x + ',' + y] !== undefined) continue
+
                 var axoCoords = RectToAxo([x, y])
+                var axoKey = axoCoords[0] + ',' + axoCoords[1]
+
                 if (Math.abs(axoCoords[0]) > mapSize ||
                     Math.abs(axoCoords[1]) > mapSize) continue
-                if (loadingTiles[axoCoords[0] + ',' + axoCoords[1]] !== undefined) continue
+
+                var tile = tilesRectMap[x + ',' + y]
+                if (tile !== undefined) {
+
+                    tile.onScreen = true
+
+                    var building = buildingsMap[axoKey]
+                    if (building !== undefined) building.onScreen = true
+
+                    var obstacle = obstaclesMap[axoKey]
+                    if (obstacle !== undefined) obstacle.onScreen = true
+
+                    continue
+
+                }
+
+                if (loadingTiles[axoKey] !== undefined) continue
+
                 emptyPoints.push(axoCoords)
+
             }
         }
 
-        var topLeftCoords = AxoToRect(axoCoordsAt(-tileVisibleWidth * zoom, -tileVisibleHeight * zoom)),
-            bottomRightCoords = AxoToRect(axoCoordsAt(innerWidth + tileVisibleWidth * zoom, innerHeight + tileVisibleHeight * zoom))
+        tiles.forEach(function (tile) {
+            tile.onScreen = false
+        })
+
+        obstacles.forEach(function (obstacle) {
+            obstacle.onScreen = false
+        })
+
+        buildings.forEach(function (building) {
+            building.onScreen = false
+        })
+
+        var topLeftCoords = AxoToRect(axoCoordsAt(-innerWidth, -innerHeight)),
+            bottomRightCoords = AxoToRect(axoCoordsAt(innerWidth * 2, innerHeight * 2))
 
         var emptyPoints = []
         for (var y = topLeftCoords[1]; y <= bottomRightCoords[1]; y += 2) {
             checkRow(topLeftCoords[0], bottomRightCoords[0], y)
             checkRow(topLeftCoords[0] + 1, bottomRightCoords[0], y + 1)
+        }
+
+        for (var i = 0; i < tiles.length; i++) {
+            var tile = tiles[i]
+            if (tile.onScreen) continue
+            translateG.removeChild(tile.element)
+            delete tilesRectMap[tile.rectCoords[0] + ',' + tile.rectCoords[1]]
+            tiles.splice(i, 1)
+            i--
+        }
+
+        for (var i = 0; i < buildings.length; i++) {
+            var building = buildings[i]
+            if (building.onScreen) continue
+            translateG.removeChild(building.shadowElement)
+            delete buildingsMap[building.axoCoords[0] + ',' + building.axoCoords[1]]
+            buildings.splice(i, 1)
+            i--
+        }
+
+        for (var i = 0; i < obstacles.length; i++) {
+            var obstacle = obstacles[i]
+            if (obstacle.onScreen) continue
+            translateG.removeChild(obstacle.objectElement)
+            translateG.removeChild(obstacle.shadowElement)
+            delete obstaclesMap[obstacle.axoCoords[0] + ',' + obstacle.axoCoords[1]]
+            obstacles.splice(i, 1)
+            i--
         }
 
         if (emptyPoints.length === 0) return
@@ -211,8 +177,29 @@
     }
 
     function resize () {
-        cleanAll()
+        scheduleLoad()
         g.setAttribute('transform', 'translate(' + (innerWidth * 0.5) + ', ' + (innerHeight * 0.5) + ')')
+    }
+
+    function scheduleLoad () {
+
+        if (loadTimeout !== 0) {
+            loadScheduled = true
+            return
+        }
+
+        loadTimeout = setTimeout(function () {
+
+            load()
+
+            loadTimeout = 0
+            if (!loadScheduled) return
+            loadScheduled = false
+            scheduleLoad()
+
+        }, 100)
+        return
+
     }
 
     var zoom = 1
@@ -268,8 +255,8 @@
     var tiles = []
     var tilesRectMap = []
 
-    var cleanTimeout = 0,
-        cleanScheduled = false
+    var loadTimeout = 0,
+        loadScheduled = false
 
     var translateX = 0,
         translateY = 0
@@ -297,7 +284,7 @@
             x = e.clientX
             y = e.clientY
             translateG.setAttribute('transform', 'translate(' + translateX + ', ' + translateY + ')')
-            cleanAll()
+            scheduleLoad()
 
             e.preventDefault()
 
@@ -320,7 +307,7 @@
     document.body.appendChild(svg)
 
     repaint()
-    cleanAll()
+    scheduleLoad()
 
     addEventListener('wheel', function (e) {
         if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return
@@ -328,12 +315,12 @@
             e.preventDefault()
             zoom = Math.max(zoom / 1.1, 0.25)
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
-            cleanAll()
+            scheduleLoad()
         } else if (e.deltaY < 0) {
             e.preventDefault()
             zoom = Math.min(zoom * 1.1, 4)
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
-            cleanAll()
+            scheduleLoad()
         }
     })
 

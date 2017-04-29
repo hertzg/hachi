@@ -29,6 +29,7 @@ function Obstacle (axoCoords, type) {
     return {
         axoCoords: axoCoords,
         objectElement: objectG,
+        onScreen: false,
         rectCoords: rectCoords,
         screenCoords: screenCoords,
         shadowElement: shadowG,

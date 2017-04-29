@@ -17,6 +17,7 @@ function Tile (axoCoords, type) {
 
     return {
         element: g,
+        onScreen: false,
         rectCoords: rectCoords,
         screenCoords: screenCoords,
     }

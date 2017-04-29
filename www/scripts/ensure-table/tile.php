@@ -9,6 +9,7 @@ echo Table\ensure($mysqli, 'tile', [
         'type' => 'varchar(30)',
         'characterSet' => 'ascii',
         'collation' => 'ascii_bin',
+        'nullable' => true,
     ],
     'ground' => [
         'type' => 'varchar(30)',

@@ -18,6 +18,7 @@ function Building (axoCoords, type) {
     return {
         axoCoords: axoCoords,
         objectElement: g,
+        onScreen: false,
         rectCoords: rectCoords,
         screenCoords: screenCoords,
         shadowElement: g,
