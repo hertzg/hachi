@@ -2,12 +2,8 @@
 
 include_once 'lib/mysqli.php';
 
-include_once 'fns/generate_map.php';
-generate_map();
-
-$sql = 'select * from map where id in (select max(id) from map)';
-include_once 'fns/mysqli_single_assoc.php';
-$map = mysqli_single_assoc($mysqli, $sql);
+include_once 'fns/Database/Map/last.php';
+$map = Database\Map\last($mysqli);
 
 header('Content-Type: text/html; charset=UTF-8');
 
