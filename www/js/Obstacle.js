@@ -33,6 +33,7 @@ function Obstacle (axoCoords, type) {
         rectCoords: rectCoords,
         screenCoords: screenCoords,
         shadowElement: shadowG,
+        size: 1,
     }
 
 }

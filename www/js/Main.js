@@ -163,7 +163,13 @@
         })
 
         var all = obstacles.concat(buildings).sort(function (a, b) {
-            return a.rectCoords[1] > b.rectCoords[1] ? 1 : -1
+
+            var ay = a.rectCoords[1],
+                by = b.rectCoords[1]
+
+            if (ay === by) return a.size > b.size ? -1 : 1
+            return ay > by ? 1 : -1
+
         })
         all.forEach(function (item) {
             translateG.appendChild(item.shadowElement)

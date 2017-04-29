@@ -22,6 +22,7 @@ function Building (axoCoords, type) {
         rectCoords: rectCoords,
         screenCoords: screenCoords,
         shadowElement: g,
+        size: 2,
     }
 
 }
