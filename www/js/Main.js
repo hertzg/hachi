@@ -268,10 +268,11 @@
     var loadTimeout = 0,
         loadScheduled = false
 
-    var translateX = 0,
+    var translateX = -((mapSize - 1) * tileVisibleWidth * 0.5),
         translateY = 0
 
     var translateG = document.createElementNS(svg_xmlns, 'g')
+    translateG.setAttribute('transform', 'translate(' + translateX + ', ' + translateY + ')')
 
     var zoomG = document.createElementNS(svg_xmlns, 'g')
     zoomG.appendChild(translateG)

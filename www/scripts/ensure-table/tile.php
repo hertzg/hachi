@@ -30,9 +30,9 @@ echo Table\ensure($mysqli, 'tile', [
         'nullable' => true,
     ],
     'x' => [
-        'type' => 'bigint(20)',
+        'type' => 'bigint(20) unsigned',
     ],
     'y' => [
-        'type' => 'bigint(20)',
+        'type' => 'bigint(20) unsigned',
     ],
 ]);

@@ -2,6 +2,9 @@
 
 include_once 'lib/mysqli.php';
 
+include_once 'fns/generate_map.php';
+generate_map();
+
 $sql = 'select * from map where id in (select max(id) from map)';
 include_once 'fns/mysqli_single_assoc.php';
 $map = mysqli_single_assoc($mysqli, $sql);

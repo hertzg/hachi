@@ -1,48 +1,81 @@
 <?php
 
-function generate_map ($size) {
+function generate_map () {
+
+    $num_regions = 2;
+    $num_tiles = 20;
 
     include_once __DIR__.'/mysqli.php';
     $mysqli = mysqli();
 
-    $sql = "insert into map (size) values ($size)";
-    include_once __DIR__.'/mysqli_safe_query.php';
-    mysqli_safe_query($mysqli, $sql);
+    include_once __DIR__.'/Database/Map/add.php';
+    $id = Database\Map\add($mysqli, $num_regions * $num_tiles);
 
-    $obstacles = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2'];
+    $render = function ($offset_x, $offset_y) use ($mysqli, $id, $num_tiles) {
 
-    $id = $mysqli->insert_id;
+        $tiles = [];
+        for ($y = 0; $y < $num_tiles; $y++) {
+            $tiles[$y] = [];
+            for ($x = 0; $x < $num_tiles; $x++) {
+                $tiles[$y][$x] = [
+                    'ground' => rand(0, 100) < 30 ? 'gravel' : 'grass',
+                    'building' => null,
+                    'obstacle' => null,
+                    'taken' => false,
+                ];
+            }
+        }
 
-    $values = [];
-    $flush = function () use ($mysqli, &$values) {
-        $sql = 'insert into tile (map_id, x, y, building, ground, obstacle)'
+        $put_building = function ($x, $y, $building) use (&$tiles) {
+            $tiles[$y][$x]['building'] = 'castle';
+            $tiles[$y][$x]['taken'] = true;
+            $tiles[$y][$x + 1]['taken'] = true;
+            $tiles[$y - 1][$x]['taken'] = true;
+            $tiles[$y - 1][$x + 1]['taken'] = true;
+        };
+
+        $put_building(rand(0, $num_tiles - 2), rand(1, $num_tiles - 1), 'castle');
+
+        $obstacles = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2'];
+        for ($y = 0; $y < $num_tiles; $y++) {
+            for ($x = 0; $x < $num_tiles; $x++) {
+                if ($tiles[$y][$x]['taken']) continue;
+                if ($tiles[$y][$x]['ground'] !== 'grass') continue;
+                if (rand(0, 100) > 30) continue;
+                $tiles[$y][$x]['obstacle'] = $obstacles[array_rand($obstacles)];
+            }
+        }
+
+        $values = [];
+        foreach ($tiles as $local_y => $row) {
+            foreach ($row as $local_x => $tile) {
+
+                $x = $offset_x + $local_x;
+                $y = $offset_y + $local_y;
+
+                $building = $tile['building'];
+                if ($building === null) $building = 'null';
+                else $building = "'$building'";
+
+                $obstacle = $tile['obstacle'];
+                if ($obstacle === null) $obstacle = 'null';
+                else $obstacle = "'$obstacle'";
+
+                $values[] = "($id, $x, $y, '$tile[ground]', $building, $obstacle)";
+
+            }
+        }
+
+        $sql = 'insert into tile (map_id, x, y, ground, building, obstacle)'
             .' values '.join(', ', $values);
         mysqli_safe_query($mysqli, $sql);
-        $values = [];
+
     };
-    for ($y = -$size; $y <= $size; $y++) {
-        for ($x = -$size; $x <= $size; $x++) {
 
-            if ($x === -$size + 1 && $y === -$size + 2) {
-                $building = "'castle'";
-            } else {
-                $building = 'null';
-            }
-
-            $ground = rand(0, 100) < 30 ? 'gravel' : 'grass';
-            if ($ground === 'grass' && rand(0, 100) < 30) {
-                $obstacle = "'".$obstacles[array_rand($obstacles)]."'";
-            } else {
-                $obstacle = 'null';
-            }
-
-            $values[] = "($id, $x, $y, $building, '$ground', $obstacle)";
-            if (count($values) === 100) $flush();
-
+    for ($y = 0; $y < $num_regions; $y++) {
+        for ($x = 0; $x < $num_regions; $x++) {
+            $render($x * $num_tiles, $y * $num_tiles);
         }
     }
-    if ($values) $flush();
-
-    return $id;
 
 }
