@@ -18,11 +18,30 @@ function generate_map () {
             $tiles[$y] = [];
             for ($x = 0; $x < $num_tiles; $x++) {
                 $tiles[$y][$x] = [
-                    'ground' => rand(0, 100) < 30 ? 'gravel' : 'grass',
+                    'ground' => null,
                     'building' => null,
-                    'obstacle' => null,
+                    'obstacle' => 'obstacle',
                     'taken' => false,
                 ];
+            }
+        }
+
+        $put_water = function ($x, $y) use (&$tiles) {
+            $tiles[$y][$x]['ground'] = 'water';
+            $tiles[$y][$x]['taken'] = true;
+        };
+
+        $x = rand(1, $num_tiles - 2);
+        $y = rand(1, $num_tiles - 2);
+        $put_water($x, $y);
+        $put_water($x + 1, $y);
+        $put_water($x, $y + 1);
+        $put_water($x + 1, $y + 1);
+
+        for ($y = 0; $y < $num_tiles; $y++) {
+            for ($x = 0; $x < $num_tiles; $x++) {
+                if ($tiles[$y][$x]['taken']) continue;
+                $tiles[$y][$x]['ground'] = rand(0, 100) < 30 ? 'gravel' : 'grass';
             }
         }
 
