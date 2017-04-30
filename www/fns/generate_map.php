@@ -40,7 +40,10 @@ function generate_map () {
         $y = rand($padding + 1, $num_tiles - $padding - 1);
         $put_building($x, $y, $buildings[array_rand($buildings)]);
 
-        $obstacles = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2'];
+        $obstacles = [
+            'tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2',
+            'apple-bush', 'orange-bush',
+        ];
         for ($y = 0; $y < $num_tiles; $y++) {
             for ($x = 0; $x < $num_tiles; $x++) {
                 if ($tiles[$y][$x]['taken']) continue;
