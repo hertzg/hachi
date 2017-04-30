@@ -21,7 +21,7 @@ function Building (axoCoords, type) {
         onScreen: false,
         rectCoords: rectCoords,
         screenCoords: screenCoords,
-        shadowElement: g,
+        shadowElement: document.createElementNS(svg_xmlns, 'g'),
         size: 2,
     }
 

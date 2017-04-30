@@ -69,7 +69,7 @@
         for (var i = 0; i < tiles.length; i++) {
             var tile = tiles[i]
             if (tile.onScreen) continue
-            translateG.removeChild(tile.element)
+            groundG.removeChild(tile.element)
             delete tilesRectMap[tile.rectCoords[0] + ',' + tile.rectCoords[1]]
             tiles.splice(i, 1)
             i--
@@ -78,7 +78,8 @@
         for (var i = 0; i < buildings.length; i++) {
             var building = buildings[i]
             if (building.onScreen) continue
-            translateG.removeChild(building.shadowElement)
+            objectsG.removeChild(building.objectElement)
+            shadowsG.removeChild(building.shadowElement)
             delete buildingsMap[building.axoCoords[0] + ',' + building.axoCoords[1]]
             buildings.splice(i, 1)
             i--
@@ -87,8 +88,8 @@
         for (var i = 0; i < obstacles.length; i++) {
             var obstacle = obstacles[i]
             if (obstacle.onScreen) continue
-            translateG.removeChild(obstacle.objectElement)
-            translateG.removeChild(obstacle.shadowElement)
+            objectsG.removeChild(obstacle.objectElement)
+            shadowsG.removeChild(obstacle.shadowElement)
             delete obstaclesMap[obstacle.axoCoords[0] + ',' + obstacle.axoCoords[1]]
             obstacles.splice(i, 1)
             i--
@@ -159,7 +160,7 @@
             return a.rectCoords[1] > b.rectCoords[1] ? 1 : -1
         })
         tiles.forEach(function (tile) {
-            translateG.appendChild(tile.element)
+            groundG.appendChild(tile.element)
         })
 
         var all = obstacles.concat(buildings).sort(function (a, b) {
@@ -172,10 +173,10 @@
 
         })
         all.forEach(function (item) {
-            translateG.appendChild(item.shadowElement)
+            shadowsG.appendChild(item.shadowElement)
         })
         all.forEach(function (item) {
-            translateG.appendChild(item.objectElement)
+            objectsG.appendChild(item.objectElement)
         })
 
     }
@@ -186,7 +187,7 @@
         zoom = Math.max(minZoom, Math.min(maxZoom, zoom))
         zoomG.setAttribute('transform', 'scale(' + zoom + ')')
         scheduleLoad()
-        g.setAttribute('transform', 'translate(' + (innerWidth * 0.5) + ', ' + (innerHeight * 0.5) + ')')
+        centerG.setAttribute('transform', 'translate(' + (innerWidth * 0.5) + ', ' + (innerHeight * 0.5) + ')')
     }
 
     function scheduleLoad () {
@@ -271,18 +272,33 @@
     var translateX = -((mapSize - 1) * tileVisibleWidth * 0.5),
         translateY = 0
 
+    var groundG = document.createElementNS(svg_xmlns, 'g')
+    groundG.setAttribute('class', 'Main-ground')
+
+    var shadowsG = document.createElementNS(svg_xmlns, 'g')
+    shadowsG.setAttribute('class', 'Main-shadows')
+
+    var objectsG = document.createElementNS(svg_xmlns, 'g')
+    objectsG.setAttribute('class', 'Main-objects')
+
     var translateG = document.createElementNS(svg_xmlns, 'g')
+    translateG.setAttribute('class', 'Main-translate')
     translateG.setAttribute('transform', 'translate(' + translateX + ', ' + translateY + ')')
+    translateG.appendChild(groundG)
+    translateG.appendChild(shadowsG)
+    translateG.appendChild(objectsG)
 
     var zoomG = document.createElementNS(svg_xmlns, 'g')
+    zoomG.setAttribute('class', 'Main-zoom')
     zoomG.appendChild(translateG)
 
-    var g = document.createElementNS(svg_xmlns, 'g')
-    g.appendChild(zoomG)
+    var centerG = document.createElementNS(svg_xmlns, 'g')
+    centerG.setAttribute('class', 'Main-center')
+    centerG.appendChild(zoomG)
 
     var svg = document.createElementNS(svg_xmlns, 'svg')
     svg.setAttribute('class', 'Main')
-    svg.appendChild(g)
+    svg.appendChild(centerG)
     svg.addEventListener('mousedown', function (e) {
 
         function mouseMove (e) {
