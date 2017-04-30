@@ -172,11 +172,23 @@
             return ay > by ? 1 : -1
 
         })
-        all.forEach(function (item) {
-            shadowsG.appendChild(item.shadowElement)
-        })
-        all.forEach(function (item) {
-            objectsG.appendChild(item.objectElement)
+        var time = Date.now()
+        all.forEach(function (item, index) {
+
+            var shadowElement = item.shadowElement,
+                objectElement = item.objectElement
+
+            if (shadowElement.parentNode !== null) return
+
+            if (index === shadowsG.childNodes.length) {
+                shadowsG.appendChild(shadowElement)
+                objectsG.appendChild(objectElement)
+                return
+            }
+
+            shadowsG.insertBefore(shadowElement, shadowsG.childNodes[index])
+            objectsG.insertBefore(objectElement, objectsG.childNodes[index])
+
         })
 
     }
