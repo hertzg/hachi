@@ -194,8 +194,8 @@
     }
 
     function resize () {
-        minZoom = innerWidth / (tileVisibleWidth * 12)
-        maxZoom = innerWidth / (tileVisibleWidth * 4)
+        minZoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 12)
+        maxZoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 4)
         zoom = Math.max(minZoom, Math.min(maxZoom, zoom))
         zoomG.setAttribute('transform', 'scale(' + zoom + ')')
         scheduleLoad()
@@ -224,7 +224,7 @@
     }
 
     var minZoom, maxZoom
-    var zoom = innerWidth / (tileVisibleWidth * 8)
+    var zoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 8)
 
     var mapSize = map.size
 
