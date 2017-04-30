@@ -2,8 +2,8 @@
 
 function generate_map () {
 
-    $num_regions = 2;
-    $num_tiles = 10;
+    $num_regions = 10;
+    $num_tiles = 8;
 
     include_once __DIR__.'/mysqli.php';
     $mysqli = mysqli();
@@ -34,10 +34,11 @@ function generate_map () {
             $tiles[$y - 1][$x + 1]['taken'] = true;
         };
 
+        $buildings = ['castle', 'farm', 'barn', 'camp', 'tower', 'gold', 'stone'];
         $padding = 2;
         $x = rand($padding, $num_tiles - $padding - 2);
         $y = rand($padding + 1, $num_tiles - $padding - 1);
-        $put_building($x, $y, 'castle');
+        $put_building($x, $y, $buildings[array_rand($buildings)]);
 
         $obstacles = ['tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2'];
         for ($y = 0; $y < $num_tiles; $y++) {
