@@ -3,7 +3,7 @@
 function generate_map () {
 
     $num_regions = 10;
-    $num_tiles = 8;
+    $num_tiles = 10;
 
     include_once __DIR__.'/mysqli.php';
     $mysqli = mysqli();
@@ -20,7 +20,7 @@ function generate_map () {
                 $tiles[$y][$x] = [
                     'ground' => null,
                     'building' => null,
-                    'obstacle' => 'obstacle',
+                    'obstacle' => null,
                     'taken' => false,
                 ];
             }
