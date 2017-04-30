@@ -9,14 +9,10 @@ function Tile (axoCoords, type) {
     image.setAttributeNS(xlink_xmlns, 'href', 'img/tile/' + type + '.svg')
     image.setAttribute('width', tileWidth)
     image.setAttribute('height', tileHeight)
-    image.setAttribute('transform', 'translate(' + (-tileWidth * 0.5) + ', ' + (-tileHeight * 0.5) + ')')
-
-    var g = document.createElementNS(svg_xmlns, 'g')
-    g.appendChild(image)
-    g.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
+    image.setAttribute('transform', 'translate(' + (-tileWidth * 0.5) + ', ' + (-tileHeight * 0.5) + ') translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
-        element: g,
+        element: image,
         onScreen: false,
         rectCoords: rectCoords,
         screenCoords: screenCoords,

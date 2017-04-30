@@ -9,15 +9,11 @@ function Building (axoCoords, type) {
     image.setAttributeNS(xlink_xmlns, 'href', 'img/building/' + type + '.svg')
     image.setAttribute('width', buildingWidth)
     image.setAttribute('height', buildingHeight)
-    image.setAttribute('transform', 'translate(' + (-buildingWidth * 0.5) + ', ' + (-buildingHeight + tileHeight * 0.5) + ')')
-
-    var g = document.createElementNS(svg_xmlns, 'g')
-    g.appendChild(image)
-    g.setAttribute('transform', 'translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
+    image.setAttribute('transform', 'translate(' + (-buildingWidth * 0.5) + ', ' + (-buildingHeight + tileHeight * 0.5) + ') translate(' + screenCoords[0] + ', ' + screenCoords[1] + ')')
 
     return {
         axoCoords: axoCoords,
-        objectElement: g,
+        objectElement: image,
         onScreen: false,
         rectCoords: rectCoords,
         screenCoords: screenCoords,
