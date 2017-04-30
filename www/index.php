@@ -2,6 +2,9 @@
 
 include_once 'lib/mysqli.php';
 
+//include_once 'fns/generate_map.php';
+//generate_map();
+
 include_once 'fns/Database/Map/last.php';
 $map = Database\Map\last($mysqli);
 

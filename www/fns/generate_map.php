@@ -26,22 +26,45 @@ function generate_map () {
             }
         }
 
-        $put_water = function ($x, $y) use (&$tiles) {
-            $tiles[$y][$x]['ground'] = 'water';
-            $tiles[$y][$x]['taken'] = true;
-        };
+        if (mt_rand(0, 100) < 30) {
+            $x = mt_rand(0, $num_tiles - 1);
+            $y = mt_rand(0, $num_tiles - 1);
+            $queue = [[$x, $y]];
+            $placed = 0;
+            $num_waters = mt_rand(4, 6);
+            while ($queue) {
 
-        $x = rand(1, $num_tiles - 2);
-        $y = rand(1, $num_tiles - 2);
-        $put_water($x, $y);
-        $put_water($x + 1, $y);
-        $put_water($x, $y + 1);
-        $put_water($x + 1, $y + 1);
+                list($x, $y) = array_shift($queue);
+
+                $tiles[$y][$x]['ground'] = 'water';
+                $tiles[$y][$x]['taken'] = true;
+                $placed++;
+                if ($placed === $num_waters) break;
+
+                $next_queue = [
+                    [$x - 1, $y],
+                    [$x + 1, $y],
+                    [$x, $y - 1],
+                    [$x, $y + 1],
+                ];
+                shuffle($next_queue);
+                array_shift($next_queue);
+
+                foreach ($next_queue as $coords) {
+                    list($x, $y) = $coords;
+                    if ($x === -1 || $x === $num_tiles) continue;
+                    if ($y === -1 || $y === $num_tiles) continue;
+                    if ($tiles[$y][$x]['ground'] === 'water') continue;
+                    $queue[] = $coords;
+                }
+
+            }
+        }
 
         for ($y = 0; $y < $num_tiles; $y++) {
             for ($x = 0; $x < $num_tiles; $x++) {
                 if ($tiles[$y][$x]['taken']) continue;
-                $tiles[$y][$x]['ground'] = rand(0, 100) < 30 ? 'gravel' : 'grass';
+                $tiles[$y][$x]['ground'] = mt_rand(0, 100) < 30 ? 'gravel' : 'grass';
             }
         }
 
@@ -55,8 +78,8 @@ function generate_map () {
 
         $buildings = ['castle', 'farm', 'barn', 'camp', 'tower', 'gold', 'stone'];
         $padding = 2;
-        $x = rand($padding, $num_tiles - $padding - 2);
-        $y = rand($padding + 1, $num_tiles - $padding - 1);
+        $x = mt_rand($padding, $num_tiles - $padding - 2);
+        $y = mt_rand($padding + 1, $num_tiles - $padding - 1);
         $put_building($x, $y, $buildings[array_rand($buildings)]);
 
         $obstacles = [
@@ -67,7 +90,7 @@ function generate_map () {
             for ($x = 0; $x < $num_tiles; $x++) {
                 if ($tiles[$y][$x]['taken']) continue;
                 if ($tiles[$y][$x]['ground'] !== 'grass') continue;
-                if (rand(0, 100) > 30) continue;
+                if (mt_rand(0, 100) > 30) continue;
                 $tiles[$y][$x]['obstacle'] = $obstacles[array_rand($obstacles)];
             }
         }
