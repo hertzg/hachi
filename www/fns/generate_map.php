@@ -64,8 +64,15 @@ function generate_map () {
         for ($y = 0; $y < $num_tiles; $y++) {
             for ($x = 0; $x < $num_tiles; $x++) {
                 if ($tiles[$y][$x]['taken']) continue;
-                $tiles[$y][$x]['ground'] = mt_rand(0, 100) < 30 ? 'gravel' : 'grass';
-            }
+                if (mt_rand(0, 100) < 30) {
+                    $ground = 'gravel';
+                } elseif (mt_rand(0, 100) < 30) {
+                    $ground = 'deep-grass';
+                } else {
+                    $ground = 'grass';
+                }
+                $tiles[$y][$x]['ground'] = $ground;
+             }
         }
 
         $put_building = function ($x, $y, $building) use (&$tiles) {
@@ -82,16 +89,23 @@ function generate_map () {
         $y = mt_rand($padding + 1, $num_tiles - $padding - 1);
         $put_building($x, $y, $buildings[array_rand($buildings)]);
 
-        $obstacles = [
-            'tree', 'trees-1', 'trees-2', 'bush', 'bushes-1', 'bushes-2',
+        $grass_obstacles = [
+            'tree', 'bush', 'bushes-1', 'bushes-2',
             'apple-bush', 'orange-bush',
         ];
+        $dark_grass_obstacles = ['tree', 'trees-1', 'trees-2'];
         for ($y = 0; $y < $num_tiles; $y++) {
             for ($x = 0; $x < $num_tiles; $x++) {
                 if ($tiles[$y][$x]['taken']) continue;
-                if ($tiles[$y][$x]['ground'] !== 'grass') continue;
-                if (mt_rand(0, 100) > 30) continue;
-                $tiles[$y][$x]['obstacle'] = $obstacles[array_rand($obstacles)];
+                if ($tiles[$y][$x]['ground'] === 'grass') {
+                    if (mt_rand(0, 100) < 30) {
+                        $tiles[$y][$x]['obstacle'] = $grass_obstacles[array_rand($grass_obstacles)];
+                    }
+                } elseif ($tiles[$y][$x]['ground'] === 'deep-grass') {
+                    if (mt_rand(0, 100) < 30) {
+                        $tiles[$y][$x]['obstacle'] = $dark_grass_obstacles[array_rand($dark_grass_obstacles)];
+                    }
+                }
             }
         }
 
