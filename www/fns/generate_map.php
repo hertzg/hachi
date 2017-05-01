@@ -2,7 +2,7 @@
 
 function generate_map () {
 
-    $num_regions = 10;
+    $num_regions = 1;
     $num_tiles = 10;
 
     include_once __DIR__.'/mysqli.php';

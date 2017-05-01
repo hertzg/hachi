@@ -1,4 +1,4 @@
-;(function (map) {
+;(function (initData) {
 
     function axoCoordsAt (clientX, clientY) {
 
@@ -88,17 +88,14 @@
         for (var i = 0; i < obstacles.length; i++) {
             var obstacle = obstacles[i]
             if (obstacle.onScreen) continue
-            objectsG.removeChild(obstacle.objectElement)
-            shadowsG.removeChild(obstacle.shadowElement)
-            delete obstaclesMap[obstacle.axoCoords[0] + ',' + obstacle.axoCoords[1]]
-            obstacles.splice(i, 1)
+            removeObstacle(obstacle, i)
             i--
         }
 
         if (emptyPoints.length === 0) return
 
         var request = new XMLHttpRequest
-        request.open('post', 'api/fetch.php?map_id=' + map.id)
+        request.open('post', 'api/fetch.php?map_id=' + initData.map.id)
         request.responseType = 'json'
         request.send(JSON.stringify(emptyPoints))
         request.onerror = function () {
@@ -152,6 +149,13 @@
 
     function random (array) {
         return array[Math.floor(Math.random() * array.length)]
+    }
+
+    function removeObstacle (obstacle, index) {
+        objectsG.removeChild(obstacle.objectElement)
+        shadowsG.removeChild(obstacle.shadowElement)
+        delete obstaclesMap[obstacle.axoCoords[0] + ',' + obstacle.axoCoords[1]]
+        obstacles.splice(index, 1)
     }
 
     function repaint () {
@@ -226,7 +230,7 @@
     var minZoom, maxZoom
     var zoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 8)
 
-    var mapSize = map.size
+    var mapSize = initData.map.size
 
     var buildings = []
     var buildingsMap = Object.create(null)
@@ -365,4 +369,16 @@
     addEventListener('resize', resize)
     resize()
 
-})(map)
+    var changeFunctions = {
+        removeObstacle: function (coords) {
+            var obstacle = obstaclesMap[coords[0] + ',' + coords[1]]
+            if (obstacle === undefined) return
+            removeObstacle(obstacle, obstacles.indexOf(obstacle))
+        },
+    }
+
+    var poll = Poll(initData, function (change) {
+        changeFunctions[change[0]].apply(null, change.slice(1))
+    })
+
+})(initData)
