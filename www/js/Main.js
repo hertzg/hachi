@@ -20,8 +20,8 @@
                 var axoCoords = RectToAxo([x, y])
                 var axoKey = axoCoords[0] + ',' + axoCoords[1]
 
-                if (Math.abs(axoCoords[0]) > mapSize ||
-                    Math.abs(axoCoords[1]) > mapSize) continue
+                if (axoCoords[0] < 0 || axoCoords[0] >= mapWidth ||
+                    axoCoords[1] < 0 || axoCoords[1] >= mapHeight) continue
 
                 var tile = tilesRectMap[x + ',' + y]
                 if (tile !== undefined) {
@@ -102,15 +102,20 @@
             // TODO
         }
         request.onload = function () {
-            emptyPoints.forEach(function (coords) {
-                delete loadingTiles[coords[0] + ',' + coords[1]]
-            })
+            var foundTiles = Object.create(null)
             request.response.forEach(function (item) {
+                var coords = item[0]
+                foundTiles[coords[0] + ',' + coords[1]] = true
                 putTile(item[0], item[1])
                 var obstacleType = item[2]
                 if (obstacleType !== null) putObstacle(item[0], obstacleType)
                 var buildingType = item[3]
                 if (buildingType !== null) putBuilding(item[0], buildingType)
+            })
+            emptyPoints.forEach(function (coords) {
+                delete loadingTiles[coords[0] + ',' + coords[1]]
+                if (foundTiles[coords[0] + ',' + coords[1]] === true) return
+                putTile(coords, 'null')
             })
             repaint()
         }
@@ -230,15 +235,16 @@
     var minZoom, maxZoom
     var zoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 8)
 
-    var mapSize = initData.map.size
+    var mapWidth = initData.map.width
+    var mapHeight = initData.map.height
 
     var buildings = []
     var buildingsMap = Object.create(null)
 /*
-    putBuilding([mapSize - 2], mapSize - 2, 'castle')
-    putBuilding([mapSize - 5], mapSize - 2, 'farm')
-    putBuilding([-mapSize + 5], -mapSize, 'farm')
-    putBuilding([-mapSize + 5], -mapSize + 2, 'farm')
+    putBuilding([mapWidth - 2], mapHeight - 2, 'castle')
+    putBuilding([mapWidth - 5], mapHeight - 2, 'farm')
+    putBuilding([-mapWidth + 5], -mapHeight, 'farm')
+    putBuilding([-mapWidth + 5], -mapHeight + 2, 'farm')
     putBuilding([-3, -3], 'tower')
     putBuilding([4, 1], 'tower')
     putBuilding([3, -5], 'stone')
@@ -285,7 +291,7 @@
     var loadTimeout = 0,
         loadScheduled = false
 
-    var translateX = -((mapSize - 1) * tileVisibleWidth * 0.5),
+    var translateX = -((mapWidth - 1) * tileVisibleWidth * 0.5),
         translateY = 0
 
     var groundG = document.createElementNS(svg_xmlns, 'g')

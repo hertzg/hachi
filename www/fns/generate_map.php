@@ -9,10 +9,9 @@ function generate_map () {
     $mysqli = mysqli();
 
     include_once __DIR__.'/Database/Map/add.php';
-    $id = Database\Map\add($mysqli, $num_regions * $num_tiles);
+    $id = Database\Map\add($mysqli, $num_tiles, $num_tiles, 0);
 
     $render = function ($offset_x, $offset_y) use ($mysqli, $id, $num_tiles) {
-
         $tiles = [];
         for ($y = 0; $y < $num_tiles; $y++) {
             $tiles[$y] = [];

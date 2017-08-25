@@ -32,7 +32,8 @@ echo '<!DOCTYPE html>'
                     'since' => $change === null ? 0 : (int)$change['id'],
                     'map' => [
                         'id' => (int)$map['id'],
-                        'size' => (int)$map['size'],
+                        'width' => (int)$map['width'],
+                        'height' => (int)$map['height'],
                     ],
                 ])
             .'</script>'
