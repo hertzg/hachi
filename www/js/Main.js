@@ -203,9 +203,9 @@
     }
 
     function resize () {
-        minZoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 12)
-        maxZoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 4)
-        zoom = Math.max(minZoom, Math.min(maxZoom, zoom))
+        //minZoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 100)
+        //maxZoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 50)
+        //zoom = Math.max(minZoom, Math.min(maxZoom, zoom))
         zoomG.setAttribute('transform', 'scale(' + zoom + ')')
         scheduleLoad()
         centerG.setAttribute('transform', 'translate(' + (innerWidth * 0.5) + ', ' + (innerHeight * 0.5) + ')')
@@ -232,7 +232,7 @@
 
     }
 
-    var minZoom, maxZoom
+    var minZoom = 1, maxZoom = 10000
     var zoom = ((innerWidth + innerHeight) * 0.5) / (tileVisibleWidth * 8)
 
     var mapWidth = initData.map.width
@@ -370,7 +370,7 @@
             zoomG.setAttribute('transform', 'scale(' + zoom + ')')
             scheduleLoad()
         }
-    })
+    }, {passive: false})
 
     addEventListener('resize', resize)
     resize()
